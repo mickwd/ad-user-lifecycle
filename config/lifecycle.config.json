@@ -1,0 +1,56 @@
+{
+  "Domain": {
+    "NetBIOS": "CONTOSO",
+    "UpnSuffix": "contoso.local",
+    "Server": null
+  },
+  "OUs": {
+    "Areas": {
+      "Sistemas": "OU=Sistemas,OU=Usuarios,OU=Empresa,DC=contoso,DC=local",
+      "RRHH": "OU=RRHH,OU=Usuarios,OU=Empresa,DC=contoso,DC=local",
+      "Finanzas": "OU=Finanzas,OU=Usuarios,OU=Empresa,DC=contoso,DC=local",
+      "Comercial": "OU=Comercial,OU=Usuarios,OU=Empresa,DC=contoso,DC=local",
+      "Operaciones": "OU=Operaciones,OU=Usuarios,OU=Empresa,DC=contoso,DC=local"
+    },
+    "Bajas": "OU=Bajas,OU=Empresa,DC=contoso,DC=local"
+  },
+  "RoleGroups": {
+    "Common": ["GG_Todos_Empleados", "GG_Intranet_Lectura"],
+    "Areas": {
+      "Sistemas": ["GG_Sistemas", "GG_FS_Sistemas_RW"],
+      "RRHH": ["GG_RRHH", "GG_FS_RRHH_RW"],
+      "Finanzas": ["GG_Finanzas", "GG_FS_Finanzas_RW"],
+      "Comercial": ["GG_Comercial", "GG_CRM_Usuarios"],
+      "Operaciones": ["GG_Operaciones"]
+    },
+    "Puestos": {
+      "Analista de Soporte": ["GG_Helpdesk", "GG_VPN", "GG_Herramientas_Soporte"],
+      "Administrador de Sistemas": ["GG_VPN", "GG_Admins_Servidores_Lectura"],
+      "Analista Contable": ["GG_ERP_Contabilidad"],
+      "Analista de RRHH": ["GG_ERP_Liquidacion"],
+      "Vendedor": ["GG_VPN", "GG_CRM_Ventas"],
+      "Supervisor de Operaciones": ["GG_Reportes_Operaciones"]
+    }
+  },
+  "Password": {
+    "Length": 16
+  },
+  "HomeFolders": {
+    "Root": "\\\\fs01.contoso.local\\home$",
+    "ArchiveRoot": "\\\\fs01.contoso.local\\archivo$\\bajas",
+    "Drive": "H:",
+    "Rights": "Modify"
+  },
+  "Offboarding": {
+    "KeepGroups": ["Domain Users", "Usuarios del dominio"],
+    "SnapshotFolder": "../logs/bajas",
+    "RetentionDays": 90,
+    "RemoveHomeAfterArchive": false
+  },
+  "Audit": {
+    "LogPath": "../logs/audit.jsonl"
+  },
+  "Batch": {
+    "ReportFolder": "../output"
+  }
+}

@@ -1,0 +1,6 @@
+accion,nombre,apellido,legajo,area,puesto,manager,fecha_ingreso,usuario,ticket
+alta,Juan,Pérez,10234,Sistemas,Analista de Soporte,mgarcia,2026-11-02,,RRHH-1001
+alta,María José,de la Fuente,10235,Finanzas,Analista Contable,rlopez,2026-11-02,,RRHH-1002
+alta,Iñaki,Muñoz Ríos,10236,Comercial,Vendedor,,02/11/2026,,RRHH-1003
+cambio,,,,Sistemas,Administrador de Sistemas,,,lgomez,RRHH-1004
+baja,,,,,,,,acastro,INC-2045

@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python-lint:
+    name: Python - ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check .
+      - run: ruff format --check .
+
+  python-tests:
+    name: Python ${{ matrix.python-version }} - pytest
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: pytest
+
+  powershell:
+    name: PowerShell 5.1 - PSScriptAnalyzer + Pester
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Instalar Pester 5 y PSScriptAnalyzer
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module -Name Pester -RequiredVersion 5.7.1 -Force -SkipPublisherCheck -Scope CurrentUser
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          Get-Module -ListAvailable Pester, PSScriptAnalyzer | Select-Object Name, Version
+
+      - name: PSScriptAnalyzer (src)
+        run: Invoke-ScriptAnalyzer -Path src -Recurse -Severity Error -EnableExit
+
+      - name: PSScriptAnalyzer (scripts)
+        run: Invoke-ScriptAnalyzer -Path scripts -Recurse -Severity Error -EnableExit
+
+      - name: Pester
+        run: .\tests\Invoke-Tests.ps1 -CI
+
+      - name: Publicar resultados de Pester
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pester-results
+          path: testResults.xml
+          if-no-files-found: ignore
